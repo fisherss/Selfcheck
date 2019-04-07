@@ -4,6 +4,8 @@ import sys
 import hashlib
 import pandas as pd
 import time
+import filecmp
+import difflib
 
 DATABASE_IO_TIME = 300
 BUFFERSIZE = 6553600
@@ -12,8 +14,19 @@ CGREENBG  = '\33[32m'
 CYELLOWBG = '\33[33m'
 CEND = '\033[0m'
 
-def check2(rootdir):
-    build(rootdir,"check");
+def check2():
+    #build(rootdir,"check");
+    #filecmp('f.csv', 'f.tmp', shallow=True)
+    with open('f.csv', 'r', encoding='utf-8') as hosts0:
+        with open('f.tmp', 'r', encoding='utf-8') as hosts1:
+            diff = difflib.unified_diff(
+                hosts0.readlines(),
+                hosts1.readlines(),
+                fromfile='f.csv',
+                tofile='f.tmp',
+            )
+            for line in diff:
+                sys.stdout.write(line)
 
 def build(rootdir, switch):
     print ("func build");
@@ -52,6 +65,7 @@ def build(rootdir, switch):
                 database.to_csv(rootdir + ext, encoding='utf-8')
                 timer = time.time()
     database.to_csv(rootdir + ext, encoding='utf-8')
+    check2()
 
 def check(rootdir):
     database = pd.read_csv(rootdir + '.csv')
@@ -78,7 +92,7 @@ if sys.argv[1] == 'build':
     build(sys.argv[2],"build");
     exit(0);
 if sys.argv[1] == 'check':
-    check2(sys.argv[2]);
+    build(sys.argv[2], "check");
     exit(0);
 
 arg = sys.argv[1]
