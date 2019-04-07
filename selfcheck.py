@@ -4,8 +4,8 @@ import sys
 import hashlib
 import pandas as pd
 import time
-import filecmp
 import difflib
+from colorama import Fore, Back, Style, init
 
 DATABASE_IO_TIME = 300
 BUFFERSIZE = 6553600
@@ -14,9 +14,8 @@ CGREENBG  = '\33[32m'
 CYELLOWBG = '\33[33m'
 CEND = '\033[0m'
 
+init()
 def check2():
-    #build(rootdir,"check");
-    #filecmp('f.csv', 'f.tmp', shallow=True)
     with open('f.csv', 'r', encoding='utf-8') as hosts0:
         with open('f.tmp', 'r', encoding='utf-8') as hosts1:
             diff = difflib.unified_diff(
@@ -26,7 +25,14 @@ def check2():
                 tofile='f.tmp',
             )
             for line in diff:
-                sys.stdout.write(line)
+                #sys.stdout.write(line)
+                if line.startswith('+'):
+                    print (CRED + line + CEND);
+                elif line.startswith('-'):
+                    print (CRED + line + CEND);
+                elif line.startswith('^'):
+                    print (CRED + line + CEND);
+
 
 def build(rootdir, switch):
     print ("func build");
