@@ -15,6 +15,17 @@ CYELLOWBG = '\33[33m'
 CEND = '\033[0m'
 
 init()
+def check3():
+    org_pd = pd.read_csv('f.csv')
+    new_pd = pd.read_csv('f.tmp')
+    for index_org, org_row in org_pd.iterrows():
+        for index_new, new_row in new_pd.iterrows():
+            if (org_row['path'] == new_row['path']):
+                print(org_row['path']);
+                print(new_row['path']);
+                if (org_row['checksum'] != new_row['checksum']) or (org_row['mtime'] != new_row['mtime']):
+                    print("FFFFFound Errror");
+
 def check2():
     with open('f.csv', 'r', encoding='utf-8') as hosts0:
         with open('f.tmp', 'r', encoding='utf-8') as hosts1:
@@ -71,7 +82,7 @@ def build(rootdir, switch):
                 database.to_csv(rootdir + ext, encoding='utf-8')
                 timer = time.time()
     database.to_csv(rootdir + ext, encoding='utf-8')
-    check2()
+    check3()
 
 def check(rootdir):
     database = pd.read_csv(rootdir + '.csv')
